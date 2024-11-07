@@ -1,0 +1,14 @@
+plugins {
+  id 'java'
+  id 'io.freefair.lombok'
+  id("io.micronaut.library") version "4.4.2"
+}
+
+dependencies {
+  implementation project(':domain')
+  implementation("io.micronaut.serde:micronaut-serde-jackson")
+  implementation("io.micronaut:micronaut-http-client:4.4.2")
+  implementation("io.micronaut.reactor:micronaut-reactor")
+  annotationProcessor("org.projectlombok:lombok:1.18.20")
+  annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+}

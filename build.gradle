@@ -1,0 +1,25 @@
+plugins {
+  id("groovy")
+  id 'io.freefair.lombok' version '5.3.3.3' apply(false)
+}
+
+group = 'com.myapp'
+version = 'master-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+  maven { url "https://jitpack.io" }
+}
+
+java {
+  sourceCompatibility = JavaVersion.toVersion("17")
+  targetCompatibility = JavaVersion.toVersion("17")
+}
+
+subprojects {
+  apply plugin: "java"
+
+  repositories {
+    mavenCentral()
+  }
+}

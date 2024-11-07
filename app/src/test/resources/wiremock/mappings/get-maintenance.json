@@ -1,0 +1,17 @@
+{
+  "mappings" : [
+    {
+      "request" : {
+        "method" : "GET",
+        "urlPattern" : "/cars/1234"
+      },
+      "response" : {
+        "status" : 200,
+        "headers" : {
+          "Content-Type" : "application/json"
+        },
+        "bodyFileName" : "maintenance-response.json"
+      }
+    }
+  ]
+}

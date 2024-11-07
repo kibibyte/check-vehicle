@@ -1,0 +1,17 @@
+{
+  "mappings" : [
+    {
+      "request" : {
+        "method" : "GET",
+        "urlPattern" : "/accidents/report\\?vin=1234"
+      },
+      "response" : {
+        "status" : 200,
+        "headers" : {
+          "Content-Type" : "application/json"
+        },
+        "bodyFileName" : "insurance-response.json"
+      }
+    }
+  ]
+}

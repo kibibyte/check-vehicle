@@ -1,0 +1,2 @@
+rootProject.name = 'vehicle-status'
+include('app', 'domain', 'data')
