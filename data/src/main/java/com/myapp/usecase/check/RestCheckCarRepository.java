@@ -8,8 +8,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.myapp.exceptions.CheckCarExceptions;
-
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;

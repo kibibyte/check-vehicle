@@ -12,10 +12,10 @@ class CheckCarResultTest extends Specification {
     def result = new CheckCarResult(numberOfAccidents, null)
 
     then:
-    result.getAccidentFree() == accidentFree
+    result.getAccidentFree() == expectedResult
 
     where:
-    numberOfAccidents || accidentFree
+    numberOfAccidents || expectedResult
     null              || Optional.empty()
     0                 || Optional.of(true)
     1                 || Optional.of(false)
@@ -26,10 +26,10 @@ class CheckCarResultTest extends Specification {
     def result = new CheckCarResult(null, maintenanceFrequency)
 
     then:
-    result.getMaintenanceScore() == maintenanceScore
+    result.getMaintenanceScore() == expectedResult
 
     where:
-    maintenanceFrequency || maintenanceScore
+    maintenanceFrequency || expectedResult
     null                 || Optional.empty()
     LOW                  || Optional.of(POOR)
     VERY_LOW             || Optional.of(POOR)

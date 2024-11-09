@@ -16,14 +16,10 @@
     {
       "request" : {
         "method" : "GET",
-        "urlPattern" : "/accidents/report\\?vin=500"
+        "urlPattern" : "/accidents/report\\?vin=vin_error_500"
       },
       "response" : {
-        "status" : 500,
-        "headers" : {
-          "Content-Type" : "application/json"
-        },
-        "bodyFileName" : "insurance-response.json"
+        "status" : 500
       }
     }
   ]

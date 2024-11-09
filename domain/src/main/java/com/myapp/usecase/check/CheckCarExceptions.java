@@ -1,4 +1,8 @@
-package com.myapp.exceptions;
+package com.myapp.usecase.check;
+
+import com.myapp.exceptions.EntityNotFoundException;
+import com.myapp.exceptions.InvalidArgumentException;
+import com.myapp.exceptions.RestRepositoryException;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +20,7 @@ public class CheckCarExceptions {
 
     return new InvalidArgumentException(code.name(), code.getMessage());
   }
-  
+
   public static RestRepositoryException restRepositoryException() {
     var code = ErrorCodes.SERVICE_UNAVAILABLE;
 

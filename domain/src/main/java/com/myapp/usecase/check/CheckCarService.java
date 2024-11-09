@@ -9,8 +9,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.myapp.exceptions.CheckCarExceptions;
-
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;

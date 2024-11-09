@@ -12,6 +12,15 @@
         },
         "bodyFileName" : "maintenance-response.json"
       }
+    },
+    {
+      "request" : {
+        "method" : "GET",
+        "urlPattern" : "/cars/vin_error_500"
+      },
+      "response" : {
+        "status" : 500
+      }
     }
   ]
 }

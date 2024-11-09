@@ -28,10 +28,10 @@ class CheckCarQueryTest extends Specification {
 
     then:
     def e = thrown(InvalidArgumentException)
-    e.message == expectedMessage
+    e.message == expectedResult
 
     where:
-    vin    | checkCarFeatures                     || expectedMessage
+    vin    | checkCarFeatures                     || expectedResult
     "1234" | null                                 || "Features cannot be empty"
     "1234" | new HashSet<CheckCarFeature>()       || "Features cannot be empty"
     null   | new HashSet<>(asList(ACCIDENT_FREE)) || "Vin cannot be empty"
