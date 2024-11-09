@@ -6,21 +6,21 @@ import lombok.Getter;
 public class CheckCarExceptions {
 
   public static EntityNotFoundException entityNotFound() {
-    var entityNotFound = ErrorCodes.ENTITY_NOT_FOUND;
+    var code = ErrorCodes.ENTITY_NOT_FOUND;
 
-    return new EntityNotFoundException(entityNotFound.name(), entityNotFound.getMessage());
+    return new EntityNotFoundException(code.name(), code.getMessage());
   }
 
   public static InvalidArgumentException invalidArgument() {
-    var invalidArgument = ErrorCodes.INVALID_ARGUMENT;
+    var code = ErrorCodes.INVALID_ARGUMENT;
 
-    return new InvalidArgumentException(invalidArgument.name(), invalidArgument.getMessage());
+    return new InvalidArgumentException(code.name(), code.getMessage());
   }
+  
+  public static RestRepositoryException restRepositoryException() {
+    var code = ErrorCodes.SERVICE_UNAVAILABLE;
 
-  public static ServiceUnavailableException serviceUnavailableException() {
-    var invalidArgument = ErrorCodes.SERVICE_UNAVAILABLE;
-
-    return new ServiceUnavailableException(invalidArgument.name(), invalidArgument.getMessage());
+    return new RestRepositoryException(code.name(), code.getMessage());
   }
 
   @AllArgsConstructor

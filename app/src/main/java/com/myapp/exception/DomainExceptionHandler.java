@@ -3,7 +3,7 @@ package com.myapp.exception;
 import com.myapp.exceptions.DomainException;
 import com.myapp.exceptions.EntityNotFoundException;
 import com.myapp.exceptions.InvalidArgumentException;
-import com.myapp.exceptions.ServiceUnavailableException;
+import com.myapp.exceptions.RestRepositoryException;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -24,7 +24,7 @@ class DomainExceptionHandler implements ExceptionHandler<DomainException, HttpRe
     if (e instanceof InvalidArgumentException) {
       return HttpResponse.notFound(ErrorResponse.of(e.getCode(), e.getMessage()));
     }
-    if (e instanceof ServiceUnavailableException) {
+    if (e instanceof RestRepositoryException) {
       return HttpResponse.status(HttpStatus.SERVICE_UNAVAILABLE);
     }
 

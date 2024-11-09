@@ -49,19 +49,11 @@ class CheckCarService {
 
   private Mono<Optional<Integer>> getNumberOfAccidents(CheckCarQuery checkCarQuery) {
     return checkRepository.findNumberOfAccidents(checkCarQuery.getVin())
-        .doOnSubscribe(s -> log.info("Find number of accidents requested"))
-        .onErrorResume(e -> {
-          log.error("Cannot get number of accidents", e);
-          return Mono.error(CheckCarExceptions::serviceUnavailableException);
-        });
+        .doOnSubscribe(s -> log.info("Find number of accidents requested"));
   }
 
   private Mono<Optional<MaintenanceFrequency>> getMaintenanceFrequency(CheckCarQuery checkCarQuery) {
     return checkRepository.findMaintenanceFrequency(checkCarQuery.getVin())
-        .doOnSubscribe(s -> log.info("Find maintenance frequency requested"))
-        .onErrorResume(e -> {
-          log.error("Cannot get number of maintenance frequency", e);
-          return Mono.error(CheckCarExceptions::serviceUnavailableException);
-        });
+        .doOnSubscribe(s -> log.info("Find maintenance frequency requested"));
   }
 }

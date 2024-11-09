@@ -5,6 +5,11 @@ import static java.time.Duration.ofSeconds;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.myapp.exceptions.CheckCarExceptions;
+
 import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
@@ -15,6 +20,8 @@ import reactor.util.retry.RetryBackoffSpec;
 @Singleton
 @AllArgsConstructor
 class RestCheckCarRepository implements CheckCarRepository {
+
+  private static final Logger log = LoggerFactory.getLogger(RestCheckCarRepository.class);
 
   private InsuranceClient insuranceClient;
   private MaintenanceClient maintenanceClient;
@@ -27,7 +34,11 @@ class RestCheckCarRepository implements CheckCarRepository {
     return insuranceClient.getReport(vin)
         .flatMap(report -> Mono.just(Optional.of(report.getClaims())))
         .retryWhen(getRetrySpec())
-        .onErrorResume((e -> is404Error(e) ? Mono.just(Optional.empty()) : Mono.error(e)));
+        .onErrorResume((e -> {
+          log.error("Cannot get number of accidents", e);
+          return is404Error(e) ? Mono.just(Optional.empty())
+              : Mono.error(CheckCarExceptions::restRepositoryException);
+        }));
   }
 
   @Override
@@ -35,7 +46,11 @@ class RestCheckCarRepository implements CheckCarRepository {
     return maintenanceClient.getReport(vin)
         .flatMap(report -> Mono.just(Optional.of(report.getMaintenanceFrequency())))
         .retryWhen(getRetrySpec())
-        .onErrorResume((e -> is404Error(e) ? Mono.just(Optional.empty()) : Mono.error(e)));
+        .onErrorResume((e -> {
+          log.error("Cannot get maintenance frequency", e);
+          return is404Error(e) ? Mono.just(Optional.empty())
+              : Mono.error(CheckCarExceptions::restRepositoryException);
+        }));
   }
 
   private static RetryBackoffSpec getRetrySpec() {
