@@ -19,6 +19,10 @@ interface InsuranceClient {
 
     Report report;
 
+    Integer getClaims() {
+      return report.claims;
+    }
+
     @Serdeable
     @Value
     static class Report {

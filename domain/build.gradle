@@ -9,7 +9,8 @@ dependencies {
   implementation("org.apache.commons:commons-lang3:3.0")
   implementation("io.micronaut.reactor:micronaut-reactor")
   annotationProcessor("org.projectlombok:lombok:1.18.20")
-  testImplementation('org.spockframework:spock-core:2.3-groovy-4.0')
+  testImplementation("org.spockframework:spock-core:2.3-groovy-4.0")
+  testImplementation("io.projectreactor:reactor-test:3.5.11")
 }
 
 test {

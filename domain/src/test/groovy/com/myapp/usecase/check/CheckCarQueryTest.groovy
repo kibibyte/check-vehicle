@@ -9,7 +9,7 @@ import static java.util.Arrays.asList
 
 class CheckCarQueryTest extends Specification {
 
-  def "should consider CheckCar as valid"() {
+  def "should create CheckCarQuery"() {
     when:
     new CheckCarQuery(vin, checkCarFeatures)
 
@@ -22,7 +22,7 @@ class CheckCarQueryTest extends Specification {
     "1234" | new HashSet<>(asList(ACCIDENT_FREE, MAINTENANCE));
   }
 
-  def "should not consider CheckCar as valid"() {
+  def "should throw validation exception"() {
     when:
     new CheckCarQuery(vin, checkCarFeatures)
 

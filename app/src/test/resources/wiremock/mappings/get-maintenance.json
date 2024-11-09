@@ -3,7 +3,7 @@
     {
       "request" : {
         "method" : "GET",
-        "urlPattern" : "/cars/1234"
+        "urlPattern" : "/cars/existing_vin"
       },
       "response" : {
         "status" : 200,

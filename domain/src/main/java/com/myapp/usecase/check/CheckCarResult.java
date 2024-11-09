@@ -1,6 +1,5 @@
 package com.myapp.usecase.check;
 
-import static com.myapp.usecase.check.MaintenanceFrequency.HIGH;
 import static com.myapp.usecase.check.MaintenanceFrequency.LOW;
 import static com.myapp.usecase.check.MaintenanceFrequency.MEDIUM;
 import static com.myapp.usecase.check.MaintenanceFrequency.VERY_LOW;
@@ -21,7 +20,7 @@ class CheckCarResult {
 
   CheckCarResult(Integer numberOfAccidents, MaintenanceFrequency maintenanceFrequency) {
     this.accidentFree = ofNullable(numberOfAccidents)
-        .map(_numberOfAccidents -> _numberOfAccidents == 0)
+        .map(_numberOfAccidents -> _numberOfAccidents.equals(0))
         .orElse(null);
     this.maintenanceScore = ofNullable(maintenanceFrequency)
         .map(this::mapToMaintenanceScore)
@@ -36,6 +35,14 @@ class CheckCarResult {
     return ofNullable(maintenanceScore);
   }
 
+  static CheckCarResult of(Integer numberOfAccidents) {
+    return new CheckCarResult(numberOfAccidents, null);
+  }
+
+  static CheckCarResult of(MaintenanceFrequency maintenanceFrequency) {
+    return new CheckCarResult(null, maintenanceFrequency);
+  }
+
   private MaintenanceScore mapToMaintenanceScore(MaintenanceFrequency maintenanceFrequency) {
     if (maintenanceFrequency == LOW || maintenanceFrequency == VERY_LOW) {
       return POOR;
@@ -43,10 +50,7 @@ class CheckCarResult {
     if (maintenanceFrequency == MEDIUM) {
       return AVERAGE;
     }
-    if (maintenanceFrequency == HIGH) {
-      return GOOD;
-    }
 
-    return null;
+    return GOOD;
   }
 }

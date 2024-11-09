@@ -3,10 +3,23 @@
     {
       "request" : {
         "method" : "GET",
-        "urlPattern" : "/accidents/report\\?vin=1234"
+        "urlPattern" : "/accidents/report\\?vin=existing_vin"
       },
       "response" : {
         "status" : 200,
+        "headers" : {
+          "Content-Type" : "application/json"
+        },
+        "bodyFileName" : "insurance-response.json"
+      }
+    },
+    {
+      "request" : {
+        "method" : "GET",
+        "urlPattern" : "/accidents/report\\?vin=500"
+      },
+      "response" : {
+        "status" : 500,
         "headers" : {
           "Content-Type" : "application/json"
         },
