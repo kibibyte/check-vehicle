@@ -19,7 +19,7 @@ import io.micronaut.http.filter.ServerFilterChain;
 @Filter(MATCH_ALL_PATTERN)
 public class MDCFilter implements HttpServerFilter {
 
-  public static String REQUEST_ID = "requestId";
+  final public static String REQUEST_ID = "requestId";
 
   @Override
   public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {

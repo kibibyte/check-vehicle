@@ -1,6 +1,8 @@
 plugins {
   id("groovy")
-  id 'io.freefair.lombok' version '5.3.3.3' apply(false)
+  id("io.freefair.lombok") version "5.3.3.3" apply(false)
+  id("io.micronaut.application") version "4.4.2" apply(false)
+  id("io.micronaut.aot") version "4.4.2" apply(false)
 }
 
 group = 'com.myapp'
@@ -13,6 +15,16 @@ java {
 
 subprojects {
   apply plugin: "java"
+
+  dependencies {
+    testImplementation("com.github.wiremock:wiremock-testcontainers-java:1.0-alpha-6")
+    testImplementation("org.mock-server:mockserver-client-java:5.15.0")
+    testImplementation("org.wiremock:wiremock-standalone:3.0.4")
+  }
+
+  test {
+    useJUnitPlatform()
+  }
 
   repositories {
     mavenCentral()

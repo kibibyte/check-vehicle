@@ -9,8 +9,8 @@ import lombok.Getter;
 
 public class CheckCarExceptions {
 
-  public static EntityNotFoundException entityNotFound() {
-    var code = ErrorCodes.ENTITY_NOT_FOUND;
+  public static EntityNotFoundException vinNotFound() {
+    var code = ErrorCodes.VIN_NOT_FOUND;
 
     return new EntityNotFoundException(code.name(), code.getMessage());
   }
@@ -30,7 +30,7 @@ public class CheckCarExceptions {
   @AllArgsConstructor
   @Getter
   public enum ErrorCodes {
-    ENTITY_NOT_FOUND("Vin not found"),
+    VIN_NOT_FOUND("Vin not found"),
     INVALID_ARGUMENT("Invalid argument"),
     SERVICE_UNAVAILABLE("Service unavailable");
 

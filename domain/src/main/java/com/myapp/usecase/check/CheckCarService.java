@@ -18,29 +18,31 @@ class CheckCarService {
   private final CheckCarRepository checkRepository;
 
   Mono<CheckCarResult> check(CheckCarQuery checkCarQuery) {
+    final var vin = checkCarQuery.getVin();
+
     log.info("Check car requested");
 
-    Mono<Integer> numberOfAccidents = checkRepository
+    Mono<Integer> findNumberOfAccidents = checkRepository
         .findNumberOfAccidents(checkCarQuery.getVin())
-        .doOnSubscribe(s -> log.info("Find number of accidents requested"))
-        .flatMap(value -> Mono.just(value.orElseThrow(CheckCarExceptions::entityNotFound)));
+        .doOnSubscribe(__ -> log.info("Find number of accidents requested [vin={}]", vin))
+        .map(numberOfAccidents -> numberOfAccidents.orElseThrow(CheckCarExceptions::vinNotFound));
 
-    Mono<MaintenanceFrequency> maintenanceFrequency = checkRepository
+    Mono<MaintenanceFrequency> findMaintenanceFrequency = checkRepository
         .findMaintenanceFrequency(checkCarQuery.getVin())
-        .doOnSubscribe(s -> log.info("Find maintenance frequency requested"))
-        .flatMap(value -> Mono.just(value.orElseThrow(CheckCarExceptions::entityNotFound)));
+        .doOnSubscribe(__ -> log.info("Find maintenance frequency requested [vin={}]", vin))
+        .map(maintenanceFrequency -> maintenanceFrequency.orElseThrow(CheckCarExceptions::vinNotFound));
 
     if (checkCarQuery.isCheckAll()) {
-      return Mono.zip(numberOfAccidents, maintenanceFrequency)
-          .flatMap(tuple -> Mono.just(new CheckCarResult(checkCarQuery.getVin(), tuple.getT1(), tuple.getT2())));
+      return Mono.zip(findNumberOfAccidents, findMaintenanceFrequency)
+          .map(tuple -> new CheckCarResult(vin, tuple.getT1(), tuple.getT2()));
     }
 
     if (checkCarQuery.isCheckFeature(MAINTENANCE)) {
-      return maintenanceFrequency.flatMap((value) -> Mono.just(CheckCarResult.of(checkCarQuery.getVin(), value)));
+      return findMaintenanceFrequency.map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
     }
 
     if (checkCarQuery.isCheckFeature(ACCIDENT_FREE)) {
-      return numberOfAccidents.flatMap((value) -> Mono.just(CheckCarResult.of(checkCarQuery.getVin(), value)));
+      return findNumberOfAccidents.map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
     }
 
     return Mono.empty();

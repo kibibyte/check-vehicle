@@ -1,18 +1,13 @@
 plugins {
-  id 'groovy'
-  id("com.github.johnrengelman.shadow") version "8.1.1"
-  id("io.micronaut.application") version "4.4.2"
-  id("com.diffplug.spotless") version "6.23.3"
-  id("io.micronaut.aot") version "4.4.2"
-  id 'io.freefair.lombok'
+  id("groovy")
+  id("io.freefair.lombok")
+  id("io.micronaut.application")
+  id("io.micronaut.aot")
 }
 
 dependencies {
   implementation project(':domain')
   implementation project(':data')
-
-  compileOnly("org.projectlombok:lombok:1.18.20")
-
   implementation("io.micronaut:micronaut-http-client")
   implementation "io.micronaut:micronaut-inject"
   implementation "io.micronaut:micronaut-runtime"
@@ -21,24 +16,14 @@ dependencies {
   implementation("io.micronaut.serde:micronaut-serde-jackson")
   implementation("io.micronaut.reactor:micronaut-reactor")
 
-  annotationProcessor("org.projectlombok:lombok:1.18.20")
+  annotationProcessor("org.projectlombok:lombok")
   annotationProcessor("io.micronaut:micronaut-inject-java")
   annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
   annotationProcessor("io.micronaut:micronaut-http-validation")
   annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
-  testImplementation("com.github.wiremock:wiremock-testcontainers-java:1.0-alpha-6")
   testImplementation("io.micronaut.test:micronaut-test-rest-assured")
-  testImplementation("org.mock-server:mockserver-client-java:5.15.0")
   testImplementation("org.testcontainers:junit-jupiter")
-  testImplementation("org.junit.jupiter:junit-jupiter-api")
-  testImplementation("org.testcontainers:mockserver")
-  testImplementation("org.testcontainers:testcontainers")
-  testImplementation("org.wiremock:wiremock-standalone:3.0.4")
-}
-
-test {
-  useJUnitPlatform()
 }
 
 application {

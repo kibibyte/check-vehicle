@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
 import io.restassured.RestAssured
-import io.restassured.specification.RequestSpecification
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -29,19 +28,17 @@ class CheckCarQueryControllerTest {
 
   static CHECK_PATH = "/check"
 
+  def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
+
   def getProperties() {
-    [
-        "micronaut.http.services.insurance.url"  : wireMock.baseUrl(),
-        "micronaut.http.services.maintenance.url": wireMock.baseUrl()
-    ]
+    ["micronaut.http.services.insurance.url"  : wireMock.baseUrl(),
+     "micronaut.http.services.maintenance.url": wireMock.baseUrl()]
   }
 
   @Test
   void shouldCheckCarFeatures() {
     given:
-    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
     RestAssured.port = server.getPort()
-
     def vinToCheck = "existing_vin"
     def request = createRequest(vinToCheck)
 
@@ -59,9 +56,7 @@ class CheckCarQueryControllerTest {
   @Test
   void shouldNotCheckCarFeaturesIfVinIsMissing() {
     given:
-    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
     RestAssured.port = server.getPort()
-
     def request = createRequest("")
 
     when:
@@ -74,12 +69,9 @@ class CheckCarQueryControllerTest {
   @Test
   void shouldNotCheckCarFeaturesIfFeaturesAreMissing() {
     given:
-    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
     RestAssured.port = server.getPort()
-
     def vinToCheck = "existing_vin"
     def bodyRequest = new CheckCarRequest(vinToCheck, [])
-
     def request = given().
         header("Content-Type", APPLICATION_JSON).body(bodyRequest)
 
@@ -93,9 +85,7 @@ class CheckCarQueryControllerTest {
   @Test
   void shouldNotCheckCarFeaturesIfVinNotFound() {
     given:
-    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
     RestAssured.port = server.getPort()
-
     def vinToCheck = "non_existing_vin"
     def request = createRequest(vinToCheck)
 
@@ -109,9 +99,7 @@ class CheckCarQueryControllerTest {
   @Test
   void shouldNotCheckCarFeaturesIf3rdPartyServiceIsDown() {
     given:
-    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
     RestAssured.port = server.getPort()
-
     def vinToCheck = "vin_error_500"
     def request = createRequest(vinToCheck)
 
@@ -122,10 +110,10 @@ class CheckCarQueryControllerTest {
     response.then().statusCode(SERVICE_UNAVAILABLE.code);
   }
 
-  private static RequestSpecification createRequest(String vinToCheck) {
+  private static createRequest(String vinToCheck) {
     def bodyRequest = new CheckCarRequest(vinToCheck, [ACCIDENT_FREE, MAINTENANCE])
 
-    return given().header("Content-Type", APPLICATION_JSON)
+    given().header("Content-Type", APPLICATION_JSON)
         .body(bodyRequest)
   }
 }

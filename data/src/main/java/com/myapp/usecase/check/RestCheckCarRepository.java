@@ -30,7 +30,7 @@ class RestCheckCarRepository implements CheckCarRepository {
   @Override
   public Mono<Optional<Integer>> findNumberOfAccidents(String vin) {
     return insuranceClient.getReport(vin)
-        .flatMap(report -> Mono.just(Optional.of(report.getClaims())))
+        .map(report -> Optional.of(report.getClaims()))
         .retryWhen(getRetrySpec())
         .onErrorResume((e -> {
           log.error("Cannot get number of accidents", e);
@@ -42,7 +42,7 @@ class RestCheckCarRepository implements CheckCarRepository {
   @Override
   public Mono<Optional<MaintenanceFrequency>> findMaintenanceFrequency(String vin) {
     return maintenanceClient.getReport(vin)
-        .flatMap(report -> Mono.just(Optional.of(report.getMaintenanceFrequency())))
+        .map(report -> Optional.of(report.getMaintenanceFrequency()))
         .retryWhen(getRetrySpec())
         .onErrorResume((e -> {
           log.error("Cannot get maintenance frequency", e);
@@ -52,8 +52,9 @@ class RestCheckCarRepository implements CheckCarRepository {
   }
 
   private static RetryBackoffSpec getRetrySpec() {
-    return Retry.
-        backoff(RETRY_MAX_ATTEMPTS, ofSeconds(RETRY_DELAY_SEC)).filter(e -> !is404Error(e));
+    return Retry
+        .backoff(RETRY_MAX_ATTEMPTS, ofSeconds(RETRY_DELAY_SEC))
+        .filter(e -> !is404Error(e));
   }
 
   private static boolean is404Error(Throwable e) {
