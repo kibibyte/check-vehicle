@@ -13,14 +13,14 @@ java {
   targetCompatibility = JavaVersion.toVersion("17")
 }
 
+ext {
+  commonsLang3Version = "3.0"
+  mockserverClientJavaVersion = "5.15.0"
+  wiremockStandaloneVersion = "3.0.4"
+}
+
 subprojects {
   apply plugin: "java"
-
-  dependencies {
-    testImplementation("com.github.wiremock:wiremock-testcontainers-java:1.0-alpha-6")
-    testImplementation("org.mock-server:mockserver-client-java:5.15.0")
-    testImplementation("org.wiremock:wiremock-standalone:3.0.4")
-  }
 
   test {
     useJUnitPlatform()

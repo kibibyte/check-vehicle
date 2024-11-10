@@ -22,7 +22,7 @@ class DomainExceptionHandler implements ExceptionHandler<DomainException, HttpRe
       return HttpResponse.notFound(ErrorResponse.of(e.getCode(), e.getMessage()));
     }
     if (e instanceof InvalidArgumentException) {
-      return HttpResponse.notFound(ErrorResponse.of(e.getCode(), e.getMessage()));
+      return HttpResponse.badRequest(ErrorResponse.of(e.getCode(), e.getMessage()));
     }
     if (e instanceof RestRepositoryException) {
       return HttpResponse.status(HttpStatus.SERVICE_UNAVAILABLE);

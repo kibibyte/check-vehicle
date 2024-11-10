@@ -29,7 +29,7 @@ public class MDCFilter implements HttpServerFilter {
         return chain.proceed(request);
       }
     } finally {
-      MDC.remove("requestId");
+      MDC.remove(REQUEST_ID);
     }
   }
 }

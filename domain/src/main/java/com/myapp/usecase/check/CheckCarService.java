@@ -15,21 +15,20 @@ import reactor.core.publisher.Mono;
 class CheckCarService {
 
   private static final Logger log = LoggerFactory.getLogger(CheckCarService.class);
-  private final CheckCarRepository checkRepository;
+  private final CheckCarRepository checkCarRepository;
 
   Mono<CheckCarResult> check(CheckCarQuery checkCarQuery) {
-    final var vin = checkCarQuery.getVin();
-
+    final String vin = checkCarQuery.getVin();
     log.info("Check car requested");
 
-    Mono<Integer> findNumberOfAccidents = checkRepository
+    Mono<Integer> findNumberOfAccidents = checkCarRepository
         .findNumberOfAccidents(checkCarQuery.getVin())
-        .doOnSubscribe(__ -> log.info("Find number of accidents requested [vin={}]", vin))
+        .doOnSubscribe(__ -> log.info("Find number of accidents requested"))
         .map(numberOfAccidents -> numberOfAccidents.orElseThrow(CheckCarExceptions::vinNotFound));
 
-    Mono<MaintenanceFrequency> findMaintenanceFrequency = checkRepository
+    Mono<MaintenanceFrequency> findMaintenanceFrequency = checkCarRepository
         .findMaintenanceFrequency(checkCarQuery.getVin())
-        .doOnSubscribe(__ -> log.info("Find maintenance frequency requested [vin={}]", vin))
+        .doOnSubscribe(__ -> log.info("Find maintenance frequency requested"))
         .map(maintenanceFrequency -> maintenanceFrequency.orElseThrow(CheckCarExceptions::vinNotFound));
 
     if (checkCarQuery.isCheckAll()) {
@@ -37,12 +36,14 @@ class CheckCarService {
           .map(tuple -> new CheckCarResult(vin, tuple.getT1(), tuple.getT2()));
     }
 
-    if (checkCarQuery.isCheckFeature(MAINTENANCE)) {
-      return findMaintenanceFrequency.map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
+    if (checkCarQuery.isCheckFeature(ACCIDENT_FREE)) {
+      return findNumberOfAccidents
+          .map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
     }
 
-    if (checkCarQuery.isCheckFeature(ACCIDENT_FREE)) {
-      return findNumberOfAccidents.map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
+    if (checkCarQuery.isCheckFeature(MAINTENANCE)) {
+      return findMaintenanceFrequency
+          .map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
     }
 
     return Mono.empty();

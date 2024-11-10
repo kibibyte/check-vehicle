@@ -9,9 +9,9 @@ dependencies {
   implementation project(':domain')
   implementation project(':data')
   implementation("io.micronaut:micronaut-http-client")
-  implementation "io.micronaut:micronaut-inject"
-  implementation "io.micronaut:micronaut-runtime"
-  implementation "io.micronaut:micronaut-http"
+  implementation("io.micronaut:micronaut-inject")
+  implementation("io.micronaut:micronaut-runtime")
+  implementation("io.micronaut:micronaut-http")
   implementation("io.micronaut.validation:micronaut-validation")
   implementation("io.micronaut.serde:micronaut-serde-jackson")
   implementation("io.micronaut.reactor:micronaut-reactor")
@@ -22,6 +22,8 @@ dependencies {
   annotationProcessor("io.micronaut:micronaut-http-validation")
   annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
+  testImplementation("org.mock-server:mockserver-client-java:${mockserverClientJavaVersion}")
+  testImplementation("org.wiremock:wiremock-standalone:${wiremockStandaloneVersion}")
   testImplementation("io.micronaut.test:micronaut-test-rest-assured")
   testImplementation("org.testcontainers:junit-jupiter")
 }

@@ -10,7 +10,7 @@ class CheckCarQueryTest extends Specification {
 
   def "should create CheckCarQuery"() {
     when:
-    def query = new CheckCarQuery(vin, checkCarFeatures)
+    new CheckCarQuery(vin, checkCarFeatures)
 
     then:
     noExceptionThrown()

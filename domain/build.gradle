@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
   implementation("io.micronaut.reactor:micronaut-reactor")
-  implementation("org.apache.commons:commons-lang3:3.0")
+  implementation("org.apache.commons:commons-lang3:${commonsLang3Version}")
 
   annotationProcessor("org.projectlombok:lombok")
 

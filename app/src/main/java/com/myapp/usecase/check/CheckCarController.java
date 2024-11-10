@@ -21,9 +21,9 @@ class CheckCarController {
 
   @Post(value = "/check", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
   Mono<CheckCarResponse> check(@Valid @Body CheckCarRequest request) {
-    var checkCar = new CheckCarQuery(request.getVin(), request.getFeatures());
+    var checkCarQuery = new CheckCarQuery(request.getVin(), request.getFeatures());
 
-    return checkCarService.check(checkCar)
+    return checkCarService.check(checkCarQuery)
         .map(this::toCheckCarResponse);
   }
 
