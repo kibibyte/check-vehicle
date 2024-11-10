@@ -35,3 +35,6 @@ curl --request POST \
 	"features": ["accident_free","maintenance"]
 }'
 ```
+
+![image](https://github.com/user-attachments/assets/48383037-78ae-483f-9047-f5f080743d8d)
+
