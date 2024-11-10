@@ -1,5 +1,6 @@
 package com.myapp.usecase.check;
 
+import static com.myapp.filters.MDCFilter.requestId;
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
 
 import org.slf4j.MDC;
@@ -22,11 +23,12 @@ class CheckCarController {
     var checkCar = new CheckCarQuery(request.getVin(), request.getFeatures());
 
     return checkCarService.check(checkCar)
-        .map(checkCarResult -> new CheckCarResponse(
-            MDC.get("requestId"),
-            request.getVin(),
-            checkCarResult.getAccidentFree().orElse(null),
-            checkCarResult.getMaintenanceScore().orElse(null))
+        .map(result -> CheckCarResponse.builder()
+            .requestId(MDC.get(requestId)).
+            vin(request.getVin()).
+            accidentFree(result.getAccidentFree().orElse(null)).
+            maintenanceScore(result.getMaintenanceScore().orElse(null)).
+            build()
         );
   }
 }

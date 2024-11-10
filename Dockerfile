@@ -1,5 +1,5 @@
-FROM openjdk:17-jdk-slim
-WORKDIR /asset-mgmt-app
-COPY app/build/libs/*.jar app.jar
+FROM eclipse-temurin:17-jre
+WORKDIR /my-app
+COPY app/build/libs/app-0.1-all.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

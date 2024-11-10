@@ -115,8 +115,8 @@ class CheckCarQueryControllerTest {
         vinToCheck, new HashSet<CheckCarFeature>()
     )
 
-    def request = given()
-        .header("Content-Type", APPLICATION_JSON).body(bodyRequest)
+    def request = given().
+        header("Content-Type", APPLICATION_JSON).body(bodyRequest)
 
     when:
     def response = request.post(CHECK_PATH)
@@ -130,7 +130,7 @@ class CheckCarQueryControllerTest {
         vinToCheck, new HashSet<CheckCarFeature>(asList(ACCIDENT_FREE, MAINTENANCE))
     )
 
-    return given().header("Content-Type", APPLICATION_JSON)
-        .body(bodyRequest)
+    return given().header("Content-Type", APPLICATION_JSON).
+        body(bodyRequest)
   }
 }
