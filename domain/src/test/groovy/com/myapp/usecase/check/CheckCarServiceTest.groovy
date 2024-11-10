@@ -7,7 +7,6 @@ import spock.lang.Specification
 import static com.myapp.usecase.check.CheckCarFeature.ACCIDENT_FREE
 import static com.myapp.usecase.check.CheckCarFeature.MAINTENANCE
 import static com.myapp.usecase.check.MaintenanceFrequency.HIGH
-import static java.util.Arrays.asList
 
 class CheckCarServiceTest extends Specification {
 
@@ -16,6 +15,7 @@ class CheckCarServiceTest extends Specification {
 
   def "should check car with success"() {
     when:
+    def vin = "1234"
     def checkCarQuery = new CheckCarQuery(vin, featuresToCheck)
     checkCarRepository.findNumberOfAccidents(vin) >> Mono.just(Optional.of(0))
     checkCarRepository.findMaintenanceFrequency(vin) >> Mono.just(Optional.of(HIGH))
@@ -27,13 +27,9 @@ class CheckCarServiceTest extends Specification {
         .verifyComplete()
 
     where:
-    vin    | featuresToCheck                              || expectedResult
-    "1234" | features(asList(ACCIDENT_FREE, MAINTENANCE)) || new CheckCarResult(0, HIGH)
-    "1234" | features(asList(ACCIDENT_FREE))              || new CheckCarResult(0, null)
-    "1234" | features(asList(MAINTENANCE))                || new CheckCarResult(null, HIGH)
-  }
-
-  def features(List featureToCheck) {
-    new HashSet<CheckCarFeature>(featureToCheck)
+    featuresToCheck              || expectedResult
+    [ACCIDENT_FREE, MAINTENANCE] || new CheckCarResult("1234", 0, HIGH)
+    [ACCIDENT_FREE]              || new CheckCarResult("1234", 0, null)
+    [MAINTENANCE]                || new CheckCarResult("1234", null, HIGH)
   }
 }

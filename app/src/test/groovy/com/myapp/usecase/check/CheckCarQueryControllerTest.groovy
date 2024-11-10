@@ -16,7 +16,6 @@ import static com.myapp.usecase.check.MaintenanceScore.POOR
 import static io.micronaut.http.HttpStatus.*
 import static io.micronaut.http.MediaType.APPLICATION_JSON
 import static io.restassured.RestAssured.given
-import static java.util.Arrays.asList
 import static org.hamcrest.CoreMatchers.is
 import static org.hamcrest.CoreMatchers.notNullValue
 
@@ -30,11 +29,11 @@ class CheckCarQueryControllerTest {
 
   static CHECK_PATH = "/check"
 
-  Map<String, Object> getProperties() {
-    Map.of(
-        "micronaut.http.services.insurance.url", wireMock.baseUrl(),
-        "micronaut.http.services.maintenance.url", wireMock.baseUrl()
-    )
+  def getProperties() {
+    [
+        "micronaut.http.services.insurance.url"  : wireMock.baseUrl(),
+        "micronaut.http.services.maintenance.url": wireMock.baseUrl()
+    ]
   }
 
   @Test
@@ -64,6 +63,25 @@ class CheckCarQueryControllerTest {
     RestAssured.port = server.getPort()
 
     def request = createRequest("")
+
+    when:
+    def response = request.post(CHECK_PATH)
+
+    then:
+    response.then().statusCode(BAD_REQUEST.code)
+  }
+
+  @Test
+  void shouldNotCheckCarFeaturesIfFeaturesAreMissing() {
+    given:
+    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
+    RestAssured.port = server.getPort()
+
+    def vinToCheck = "existing_vin"
+    def bodyRequest = new CheckCarRequest(vinToCheck, [])
+
+    def request = given().
+        header("Content-Type", APPLICATION_JSON).body(bodyRequest)
 
     when:
     def response = request.post(CHECK_PATH)
@@ -104,33 +122,10 @@ class CheckCarQueryControllerTest {
     response.then().statusCode(SERVICE_UNAVAILABLE.code);
   }
 
-  @Test
-  void shouldNotCheckCarFeaturesIfFeaturesAreMissing() {
-    given:
-    def server = ApplicationContext.run(EmbeddedServer.class, getProperties())
-    RestAssured.port = server.getPort()
-
-    def vinToCheck = "existing_vin"
-    def bodyRequest = new CheckCarRequest(
-        vinToCheck, new HashSet<CheckCarFeature>()
-    )
-
-    def request = given().
-        header("Content-Type", APPLICATION_JSON).body(bodyRequest)
-
-    when:
-    def response = request.post(CHECK_PATH)
-
-    then:
-    response.then().statusCode(BAD_REQUEST.code);
-  }
-
   private static RequestSpecification createRequest(String vinToCheck) {
-    def bodyRequest = new CheckCarRequest(
-        vinToCheck, new HashSet<CheckCarFeature>(asList(ACCIDENT_FREE, MAINTENANCE))
-    )
+    def bodyRequest = new CheckCarRequest(vinToCheck, [ACCIDENT_FREE, MAINTENANCE])
 
-    return given().header("Content-Type", APPLICATION_JSON).
-        body(bodyRequest)
+    return given().header("Content-Type", APPLICATION_JSON)
+        .body(bodyRequest)
   }
 }

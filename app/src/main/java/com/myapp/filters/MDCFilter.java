@@ -19,12 +19,12 @@ import io.micronaut.http.filter.ServerFilterChain;
 @Filter(MATCH_ALL_PATTERN)
 public class MDCFilter implements HttpServerFilter {
 
-  public static String requestId = "requestId";
+  public static String REQUEST_ID = "requestId";
 
   @Override
   public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {
     try {
-      MDC.put(requestId, UUID.randomUUID().toString());
+      MDC.put(REQUEST_ID, UUID.randomUUID().toString());
       try (PropagatedContext.Scope ignore = PropagatedContext.get().plus(new MdcPropagationContext()).propagate()) {
         return chain.proceed(request);
       }

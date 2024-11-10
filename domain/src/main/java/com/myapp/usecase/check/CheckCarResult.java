@@ -15,10 +15,12 @@ import lombok.Value;
 @Value
 class CheckCarResult {
 
+  String vin;
   Boolean accidentFree;
   MaintenanceScore maintenanceScore;
 
-  CheckCarResult(Integer numberOfAccidents, MaintenanceFrequency maintenanceFrequency) {
+  CheckCarResult(String vin, Integer numberOfAccidents, MaintenanceFrequency maintenanceFrequency) {
+    this.vin = vin;
     this.accidentFree = ofNullable(numberOfAccidents)
         .map(_numberOfAccidents -> _numberOfAccidents.equals(0))
         .orElse(null);
@@ -35,12 +37,12 @@ class CheckCarResult {
     return ofNullable(maintenanceScore);
   }
 
-  static CheckCarResult of(Integer numberOfAccidents) {
-    return new CheckCarResult(numberOfAccidents, null);
+  static CheckCarResult of(String vin, Integer numberOfAccidents) {
+    return new CheckCarResult(vin, numberOfAccidents, null);
   }
 
-  static CheckCarResult of(MaintenanceFrequency maintenanceFrequency) {
-    return new CheckCarResult(null, maintenanceFrequency);
+  static CheckCarResult of(String vin, MaintenanceFrequency maintenanceFrequency) {
+    return new CheckCarResult(vin, null, maintenanceFrequency);
   }
 
   private MaintenanceScore mapToMaintenanceScore(MaintenanceFrequency maintenanceFrequency) {

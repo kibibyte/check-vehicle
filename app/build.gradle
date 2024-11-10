@@ -7,9 +7,6 @@ plugins {
   id 'io.freefair.lombok'
 }
 
-version = "0.1"
-group = "com.myapp"
-
 dependencies {
   implementation project(':domain')
   implementation project(':data')
@@ -50,18 +47,6 @@ application {
 
 graalvmNative.toolchainDetection = false
 
-repositories {
-  mavenCentral()
-  maven { url "https://jitpack.io" }
-}
-
-java {
-  sourceCompatibility = JavaVersion.toVersion("17")
-  targetCompatibility = JavaVersion.toVersion("17")
-}
-
-graalvmNative.toolchainDetection = false
-
 micronaut {
   runtime("netty")
   testRuntime("junit5")
@@ -69,16 +54,17 @@ micronaut {
     incremental(true)
     annotations("com.myapp.*")
   }
-  /*aot {
-      // Please review carefully the optimizations enabled below
-      // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
-      optimizeServiceLoading = false
-      convertYamlToJava = false
-      precomputeOperations = true
-      cacheEnvironment = true
-      optimizeClassLoading = true
-      deduceEnvironment = true
-      optimizeNetty = true
-      replaceLogbackXml = true
-  }*/
+
+  aot {
+    // Please review carefully the optimizations enabled below
+    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+    optimizeServiceLoading = false
+    convertYamlToJava = false
+    precomputeOperations = true
+    cacheEnvironment = true
+    optimizeClassLoading = true
+    deduceEnvironment = true
+    optimizeNetty = true
+    replaceLogbackXml = true
+  }
 }

@@ -9,10 +9,13 @@ class CheckCarResultTest extends Specification {
 
   def "should create CheckCarResult using numberOfAccidents"() {
     when:
-    def result = new CheckCarResult(numberOfAccidents, null)
+    def vin = "1234";
+    def result = new CheckCarResult(vin, numberOfAccidents, null)
 
     then:
+    result.getVin() == vin
     result.getAccidentFree() == expectedResult
+    result.getMaintenanceScore() == Optional.empty()
 
     where:
     numberOfAccidents || expectedResult
@@ -23,10 +26,13 @@ class CheckCarResultTest extends Specification {
 
   def "should create CheckCarResult using maintenanceFrequency"() {
     when:
-    def result = new CheckCarResult(null, maintenanceFrequency)
+    def vin = "1234";
+    def result = new CheckCarResult(vin, null, maintenanceFrequency)
 
     then:
+    result.getVin() == vin
     result.getMaintenanceScore() == expectedResult
+    result.getAccidentFree() == Optional.empty()
 
     where:
     maintenanceFrequency || expectedResult

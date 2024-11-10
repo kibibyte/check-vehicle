@@ -5,21 +5,20 @@ import spock.lang.Specification
 
 import static com.myapp.usecase.check.CheckCarFeature.ACCIDENT_FREE
 import static com.myapp.usecase.check.CheckCarFeature.MAINTENANCE
-import static java.util.Arrays.asList
 
 class CheckCarQueryTest extends Specification {
 
   def "should create CheckCarQuery"() {
     when:
-    new CheckCarQuery(vin, checkCarFeatures)
+    def query = new CheckCarQuery(vin, checkCarFeatures)
 
     then:
     noExceptionThrown()
 
     where:
     vin    | checkCarFeatures
-    "1234" | new HashSet<>(asList(ACCIDENT_FREE));
-    "1234" | new HashSet<>(asList(ACCIDENT_FREE, MAINTENANCE));
+    "1234" | [ACCIDENT_FREE]
+    "1234" | [ACCIDENT_FREE, MAINTENANCE]
   }
 
   def "should throw validation exception"() {
@@ -31,10 +30,10 @@ class CheckCarQueryTest extends Specification {
     e.message == expectedResult
 
     where:
-    vin    | checkCarFeatures                     || expectedResult
-    "1234" | null                                 || "Features cannot be empty"
-    "1234" | new HashSet<CheckCarFeature>()       || "Features cannot be empty"
-    null   | new HashSet<>(asList(ACCIDENT_FREE)) || "Vin cannot be empty"
-    ""     | new HashSet<>(asList(ACCIDENT_FREE)) || "Vin cannot be empty"
+    vin    | checkCarFeatures || expectedResult
+    "1234" | null             || "Features cannot be empty"
+    "1234" | []               || "Features cannot be empty"
+    null   | [ACCIDENT_FREE]  || "Vin cannot be empty"
+    ""     | [ACCIDENT_FREE]  || "Vin cannot be empty"
   }
 }

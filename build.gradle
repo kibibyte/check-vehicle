@@ -6,11 +6,6 @@ plugins {
 group = 'com.myapp'
 version = 'master-SNAPSHOT'
 
-repositories {
-  mavenCentral()
-  maven { url "https://jitpack.io" }
-}
-
 java {
   sourceCompatibility = JavaVersion.toVersion("17")
   targetCompatibility = JavaVersion.toVersion("17")
@@ -21,5 +16,6 @@ subprojects {
 
   repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
   }
 }

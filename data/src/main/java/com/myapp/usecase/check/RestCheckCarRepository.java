@@ -52,9 +52,8 @@ class RestCheckCarRepository implements CheckCarRepository {
   }
 
   private static RetryBackoffSpec getRetrySpec() {
-    return Retry
-        .backoff(RETRY_MAX_ATTEMPTS, ofSeconds(RETRY_DELAY_SEC))
-        .filter(e -> !is404Error(e));
+    return Retry.
+        backoff(RETRY_MAX_ATTEMPTS, ofSeconds(RETRY_DELAY_SEC)).filter(e -> !is404Error(e));
   }
 
   private static boolean is404Error(Throwable e) {

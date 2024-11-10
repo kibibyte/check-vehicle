@@ -1,6 +1,6 @@
 package com.myapp.usecase.check;
 
-import java.util.Set;
+import java.util.List;
 
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotBlank;
@@ -17,5 +17,5 @@ class CheckCarRequest {
 
   @NotNull
   @Size(min = 1, max = 2)
-  Set<CheckCarFeature> features;
+  List<CheckCarFeature> features;
 }
