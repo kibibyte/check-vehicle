@@ -23,13 +23,13 @@ class CheckCarService {
 
     Mono<Integer> findNumberOfAccidents = checkCarRepository
         .findNumberOfAccidents(checkCarQuery.getVin())
-        .doOnSubscribe(__ -> log.info("Find number of accidents requested"))
-        .map(numberOfAccidents -> numberOfAccidents.orElseThrow(CheckCarExceptions::vinNotFound));
+        .map(numberOfAccidents -> numberOfAccidents.orElseThrow(CheckCarExceptions::vinNotFound))
+        .doOnSubscribe(__ -> log.info("Find number of accidents requested"));
 
     Mono<MaintenanceFrequency> findMaintenanceFrequency = checkCarRepository
         .findMaintenanceFrequency(checkCarQuery.getVin())
-        .doOnSubscribe(__ -> log.info("Find maintenance frequency requested"))
-        .map(maintenanceFrequency -> maintenanceFrequency.orElseThrow(CheckCarExceptions::vinNotFound));
+        .map(maintenanceFrequency -> maintenanceFrequency.orElseThrow(CheckCarExceptions::vinNotFound))
+        .doOnSubscribe(__ -> log.info("Find maintenance frequency requested"));
 
     if (checkCarQuery.isCheckAll()) {
       return Mono.zip(findNumberOfAccidents, findMaintenanceFrequency)

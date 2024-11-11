@@ -47,10 +47,11 @@ class CheckCarQueryControllerTest {
 
     then:
     response.then().
-        statusCode(OK.code).
-        body("vin", is(vinToCheck)).
-        body("requestId", notNullValue()).
-        body("maintenanceScore", is(POOR.name()))
+        statusCode(OK.code)
+        .body("vin", is(vinToCheck))
+        .body("requestId", notNullValue())
+        .body("maintenanceScore", is(POOR.name()))
+        .body("accidentFree", is(false))
   }
 
   @Test
