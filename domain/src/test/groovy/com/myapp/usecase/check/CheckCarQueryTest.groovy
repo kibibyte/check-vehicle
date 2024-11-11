@@ -31,9 +31,9 @@ class CheckCarQueryTest extends Specification {
 
     where:
     vin    | checkCarFeatures || expectedResult
-    "1234" | null             || "Features cannot be empty"
-    "1234" | []               || "Features cannot be empty"
     null   | [ACCIDENT_FREE]  || "Vin cannot be empty"
     ""     | [ACCIDENT_FREE]  || "Vin cannot be empty"
+    "1234" | null             || "Features cannot be empty"
+    "1234" | []               || "Features cannot be empty"
   }
 }

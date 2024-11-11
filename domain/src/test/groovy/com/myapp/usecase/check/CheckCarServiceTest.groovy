@@ -29,7 +29,7 @@ class CheckCarServiceTest extends Specification {
     where:
     featuresToCheck              || expectedResult
     [ACCIDENT_FREE, MAINTENANCE] || new CheckCarResult("1234", 0, HIGH)
-    [ACCIDENT_FREE]              || new CheckCarResult("1234", 0, null)
-    [MAINTENANCE]                || new CheckCarResult("1234", null, HIGH)
+    [ACCIDENT_FREE]              || CheckCarResult.of("1234", 0)
+    [MAINTENANCE]                || CheckCarResult.of("1234", HIGH)
   }
 }

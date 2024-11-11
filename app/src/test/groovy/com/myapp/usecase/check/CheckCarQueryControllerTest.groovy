@@ -46,8 +46,8 @@ class CheckCarQueryControllerTest {
     def response = request.post(CHECK_PATH)
 
     then:
-    response.then().
-        statusCode(OK.code)
+    response.then()
+        .statusCode(OK.code)
         .body("vin", is(vinToCheck))
         .body("requestId", notNullValue())
         .body("maintenanceScore", is(POOR.name()))
