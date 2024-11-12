@@ -21,29 +21,27 @@ class CheckCarService {
     final String vin = checkCarQuery.getVin();
     log.info("Check car requested");
 
-    Mono<Integer> findNumberOfAccidents = checkCarRepository
+    Mono<Integer> getNumberOfAccidents = checkCarRepository
         .findNumberOfAccidents(checkCarQuery.getVin())
         .map(numberOfAccidents -> numberOfAccidents.orElseThrow(CheckCarExceptions::vinNotFound))
         .doOnSubscribe(__ -> log.info("Find number of accidents requested"));
 
-    Mono<MaintenanceFrequency> findMaintenanceFrequency = checkCarRepository
+    Mono<MaintenanceFrequency> getMaintenanceFrequency = checkCarRepository
         .findMaintenanceFrequency(checkCarQuery.getVin())
         .map(maintenanceFrequency -> maintenanceFrequency.orElseThrow(CheckCarExceptions::vinNotFound))
         .doOnSubscribe(__ -> log.info("Find maintenance frequency requested"));
 
     if (checkCarQuery.isCheckAll()) {
-      return Mono.zip(findNumberOfAccidents, findMaintenanceFrequency)
+      return Mono.zip(getNumberOfAccidents, getMaintenanceFrequency)
           .map(tuple -> new CheckCarResult(vin, tuple.getT1(), tuple.getT2()));
     }
 
     if (checkCarQuery.isCheckFeature(ACCIDENT_FREE)) {
-      return findNumberOfAccidents
-          .map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
+      return getNumberOfAccidents.map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
     }
 
     if (checkCarQuery.isCheckFeature(MAINTENANCE)) {
-      return findMaintenanceFrequency
-          .map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
+      return getMaintenanceFrequency.map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
     }
 
     return Mono.empty();
