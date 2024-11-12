@@ -44,8 +44,12 @@ class RestCheckCarRepository implements CheckCarRepository {
   }
 
   private static <T> Mono<Optional<T>> onErrorResume(Throwable e, String message) {
+    if (is404Error(e)) {
+      return Mono.just(Optional.empty());
+    }
+
     log.error(message, e);
-    return is404Error(e) ? Mono.just(Optional.empty()) : Mono.error(CheckCarExceptions::restRepositoryException);
+    return Mono.error(CheckCarExceptions::restRepositoryException);
   }
 
   private static RetryBackoffSpec getRetrySpec() {
