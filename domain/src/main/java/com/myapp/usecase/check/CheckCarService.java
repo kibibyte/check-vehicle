@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.inject.Singleton;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 @Singleton
 @AllArgsConstructor
@@ -21,27 +22,34 @@ class CheckCarService {
     final String vin = checkCarQuery.getVin();
     log.info("Check car requested");
 
-    Mono<Integer> getNumberOfAccidents = checkCarRepository
+    Mono<Integer> checkNumberOfAccidents = checkCarRepository
         .findNumberOfAccidents(checkCarQuery.getVin())
         .map(numberOfAccidents -> numberOfAccidents.orElseThrow(CheckCarExceptions::vinNotFound))
         .doOnSubscribe(__ -> log.info("Find number of accidents requested"));
 
-    Mono<MaintenanceFrequency> getMaintenanceFrequency = checkCarRepository
+    Mono<MaintenanceFrequency> checkMaintenanceFrequency = checkCarRepository
         .findMaintenanceFrequency(checkCarQuery.getVin())
         .map(maintenanceFrequency -> maintenanceFrequency.orElseThrow(CheckCarExceptions::vinNotFound))
         .doOnSubscribe(__ -> log.info("Find maintenance frequency requested"));
 
+    Mono<Tuple2<Integer, MaintenanceFrequency>> checkAllFeatures = Mono.zip(
+        checkNumberOfAccidents,
+        checkMaintenanceFrequency
+    );
+
     if (checkCarQuery.isCheckAll()) {
-      return Mono.zip(getNumberOfAccidents, getMaintenanceFrequency)
+      return checkAllFeatures
           .map(tuple -> new CheckCarResult(vin, tuple.getT1(), tuple.getT2()));
     }
 
     if (checkCarQuery.isCheckFeature(ACCIDENT_FREE)) {
-      return getNumberOfAccidents.map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
+      return checkNumberOfAccidents
+          .map(numberOfAccidents -> CheckCarResult.of(vin, numberOfAccidents));
     }
 
     if (checkCarQuery.isCheckFeature(MAINTENANCE)) {
-      return getMaintenanceFrequency.map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
+      return checkMaintenanceFrequency
+          .map(maintenanceFrequency -> CheckCarResult.of(vin, maintenanceFrequency));
     }
 
     return Mono.empty();
