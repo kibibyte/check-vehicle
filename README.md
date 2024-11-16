@@ -1,4 +1,4 @@
-# Check vehicle status application (Java, Reactor, Micronaut )
+# Check vehicle status application (Java, Reactor, Micronaut)
 
 ## Modules
 
