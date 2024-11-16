@@ -1,10 +1,7 @@
 package com.myapp.usecase.check;
 
-import static com.myapp.usecase.check.CheckCarFeature.ACCIDENT_FREE;
-import static com.myapp.usecase.check.CheckCarFeature.MAINTENANCE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import java.util.HashSet;
 import java.util.List;
 
 import com.myapp.exceptions.InvalidArgumentException;
@@ -27,10 +24,6 @@ class CheckCarQuery {
 
     this.vin = vin;
     this.featuresToCheck = featuresToCheck;
-  }
-
-  boolean isCheckAll() {
-    return new HashSet<>(featuresToCheck).containsAll(List.of(ACCIDENT_FREE, MAINTENANCE));
   }
 
   boolean isCheckFeature(CheckCarFeature feature) {

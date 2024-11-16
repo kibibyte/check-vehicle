@@ -15,8 +15,7 @@ import static com.myapp.usecase.check.MaintenanceScore.POOR
 import static io.micronaut.http.HttpStatus.*
 import static io.micronaut.http.MediaType.APPLICATION_JSON
 import static io.restassured.RestAssured.given
-import static org.hamcrest.CoreMatchers.is
-import static org.hamcrest.CoreMatchers.notNullValue
+import static org.hamcrest.CoreMatchers.*
 
 @Testcontainers(disabledWithoutDocker = true)
 class CheckCarQueryControllerTest {
@@ -94,7 +93,12 @@ class CheckCarQueryControllerTest {
     def response = request.post(CHECK_PATH)
 
     then:
-    response.then().statusCode(NOT_FOUND.code);
+    response.then()
+        .statusCode(OK.code)
+        .body("vin", is(vinToCheck))
+        .body("requestId", notNullValue())
+        .body("maintenanceScore", nullValue())
+        .body("accidentFree", nullValue())
   }
 
   @Test
